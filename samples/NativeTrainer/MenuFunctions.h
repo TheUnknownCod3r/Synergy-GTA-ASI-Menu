@@ -151,7 +151,9 @@ int timecy, Hour = TIME::GET_CLOCK_HOURS(), Minute = TIME::GET_CLOCK_MINUTES(), 
 int DelayCounter = GetTickCount();
 bool firstopenmenu = false;
 
-int Messages = 0;
+bool keyboardActive = false;
+
+int Messages, keyboardAction, *keyboardVar = 0;
 bool SpawnedPedHasGodmode[20];
 char* SoundToPlay;
 char* SoundSetToPlay;
@@ -229,7 +231,7 @@ char* FtoS(float input)
 	int wholenumber = (int)input;
 	input -= wholenumber;
 	input *= 100;
-	sprintf(returnvalue, "%d.%d", wholenumber, (int)input);
+	sprintf_s(returnvalue, "%d.%d", wholenumber, (int)input);
 	return returnvalue;
 }
 float conv360(float base, float min, float max) {
@@ -324,8 +326,8 @@ void DRAW_SPRITE(char* TextOne, char* TextTwo, float X, float Y, float Width, fl
 void DrawSprite1(char * Streamedtexture, char * textureName, float x, float y, float width, float height, float rotation, int r, int g, int b, int a)
 {
 	GRAPHICS::REQUEST_STREAMED_TEXTURE_DICT(Streamedtexture, false);
-	if (GRAPHICS::HAS_STREAMED_TEXTURE_DICT_LOADED(Streamedtexture));
-	GRAPHICS::DRAW_SPRITE(Streamedtexture, textureName, x, y, width, height, rotation, r, g, b, a);
+	if (GRAPHICS::HAS_STREAMED_TEXTURE_DICT_LOADED(Streamedtexture))
+		GRAPHICS::DRAW_SPRITE(Streamedtexture, textureName, x, y, width, height, rotation, r, g, b, a);
 }
 void addOption(char *option, char* info = NULL)
 {
@@ -343,7 +345,7 @@ bool leftPress = false;
 void addIntOption(char *option, int *var, int min, int max, char* info = NULL)
 {
 	char buf[100];
-	_snprintf(buf, sizeof(buf), "%s < %i >", option, *var);
+	_snprintf_s(buf, sizeof(buf), "%s < %i >", option, *var);
 	addOption(buf, info);
 	if (currentOption == optionCount)
 	{
@@ -596,12 +598,12 @@ void addBoolOption(char* option, bool b00l, char* text = "", bool meg = false)
 	char buf[30];
 	if (b00l)
 	{
-		_snprintf(buf, sizeof(buf), "%s ~b~ON", option);
+		_snprintf_s(buf, sizeof(buf), "%s ~b~ON", option);
 		addOption(buf);
 	}
 	else
 	{
-		_snprintf(buf, sizeof(buf), "%s ~r~OFF", option);
+		_snprintf_s(buf, sizeof(buf), "%s ~r~OFF", option);
 		addOption(buf);
 	}
 }
@@ -619,8 +621,8 @@ void drawTextR(char * text, int font = 0, float x = TextRightCoord, float y = 0.
 
 void addChar(char *left, char** right, int *var, int min, int max, char *info = NULL)
 {
-	char buf[60]; int grey;
-	snprintf(buf, sizeof(buf), "%s(%i|%i)", right[*var], *var, max);
+	char buf[60];
+	_snprintf_s(buf, sizeof(buf), "%s(%i|%i)", right[*var], *var, max);
 	drawTextR(buf);
 	addOption(left, info);
 	if (currentOption == optionCount)
@@ -645,19 +647,49 @@ void addChar(char *left, char** right, int *var, int min, int max, char *info = 
 		}
 	}
 }
+void addCharBool(char *left, char **Default, int *var, int min, int max, bool b00l, char *info = NULL)
+{
+	char buf[60];
+	if (b00l)
+		_snprintf_s(buf, sizeof(buf), "~g~%s ~c~(%i|%i)", Default[*var], *var, max);
+	else
+		_snprintf_s(buf, sizeof(buf), "~r~%s ~c~(%i|%i)", Default[*var], *var, max);
+
+	drawTextR(buf);
+	addOption(left, info);
+	if (currentOption == optionCount)
+	{
+		if (rightPress)
+		{
+			playSound("NAV_UP_DOWN");
+			if (*var >= max)
+				*var = min;
+			else
+				*var = *var + 1;
+		}
+		else if (leftPress)
+		{
+			playSound("NAV_UP_DOWN");
+			if (*var <= min)
+				*var = max;
+			else
+				*var = *var - 1;
+		}
+	}
+}
 void addCheckBool(char *option, bool b00l1, char* info = NULL)
 {
 	char buf[30];
 	if (b00l1)
 	{
-		snprintf(buf, sizeof(buf), "%s", option);
+		_snprintf_s(buf, sizeof(buf), "%s", option);
 		DrawSprite1("commonmenu", "shop_box_tick", Checkbox, (optionCount * 0.035f + 0.175f), 0.03, 0.04, 0, 255, 255, 255, 255);
 		addOption(buf, info);
 		
 	}
 	else
 	{
-		snprintf(buf, sizeof(buf), "%s", option);
+		_snprintf_s(buf, sizeof(buf), "%s", option);
 		DrawSprite1("commonmenu", "shop_box_blank", Checkbox, (optionCount * 0.035f + 0.175f), 0.03, 0.04, 0, 255, 255, 255, 255);
 		addOption(buf, info);
 
@@ -678,6 +710,12 @@ char* StringToChar(std::string string)
 	return _strdup(string.c_str());
 }
 
+void startKeyboard(int action, char *defaultText, int maxLength)
+{
+	GAMEPLAY::DISPLAY_ONSCREEN_KEYBOARD(0, "FMMC_KEY_TIP8", "", defaultText, "", "", "", maxLength);
+	keyboardAction = action;
+	keyboardActive = true;
+}
 void MenuRun()
 {
 	monitorButtons();

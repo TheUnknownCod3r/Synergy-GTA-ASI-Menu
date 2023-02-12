@@ -66,20 +66,6 @@ int CREATE_VEHICLE(char* hash, float x, float y, float z)
 	return veh;
 }
 
-#pragma region Tunables and Globals
-unsigned int TunablePointer = 0;
-bool Write_Global(int a_uiGlobalID, int a_uiValue)
-{
-	int Ptr = *(int*)((TunablePointer - 0x04) + (((a_uiGlobalID / 0x40000) & 0x3F) * 4));
-	if (Ptr != 0)
-	{
-		*(int*)(Ptr + ((a_uiGlobalID % 0x40000) * 4)) = a_uiValue;
-		return true;
-	}
-	return false;
-}
-
-#pragma endregion
 void addVehOption(char* option, char* model11, char *notification)
 {
 	addOption(option);
@@ -103,18 +89,6 @@ void TPToWaypoint()
 		drawNotification("Teleported to ~g~Waypoint~HUD_COLOUR_WHITE~!");
 	}
 	else drawNotification("~r~Please set a Waypoint!");
-}
-void SetTunable(int index, int value)
-{
-	int TunablesAddress = (*(int*)0x1E60274) + 4;
-	{
-		if (TunablesAddress != 0)
-		{
-			int temp = TunablesAddress;
-			temp += (index * 4);
-			*(int*)temp = value;
-		}
-	}
 }
 
 char* VehName;
@@ -496,6 +470,23 @@ void otherHook()
 	else { NoCops = false; }
 	if(VehicleGod) ENTITY::SET_ENTITY_INVINCIBLE(PED::GET_VEHICLE_PED_IS_IN(PLAYER::PLAYER_PED_ID(), false), true);
 	else ENTITY::SET_ENTITY_INVINCIBLE(PED::GET_VEHICLE_PED_IS_IN(PLAYER::PLAYER_PED_ID(), false), false);
+	if (keyboardActive)
+	{
+		if (GAMEPLAY::UPDATE_ONSCREEN_KEYBOARD() == 1)
+		{
+			keyboardActive = false;
+			switch (keyboardAction)
+			{
+			case 0: //addIntOption
+				*keyboardVar = StoI(GAMEPLAY::GET_ONSCREEN_KEYBOARD_RESULT());
+				break;
+			}
+		}
+		else if (GAMEPLAY::UPDATE_ONSCREEN_KEYBOARD() == 2 || GAMEPLAY::UPDATE_ONSCREEN_KEYBOARD() == 3)
+		{
+			keyboardActive = false;
+		}
+	}
 }
 void Hook()
 {
