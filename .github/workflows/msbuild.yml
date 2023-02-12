@@ -49,3 +49,18 @@ jobs:
           !samples/NativeTrainer/bin/Release/*.map
           !samples/NativeTrainer/bin/Release/*.iobj
           !samples/NativeTrainer/bin/Release/*.ipdb
+  release:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+    - uses: actions/checkout@master
+    - name: Create release
+      uses: Roang-zero1/github-create-release-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload release artifacts
+      uses: Roang-zero1/github-upload-release-artifacts-action@v2
+      with:
+        args: "dist/bin/ dist/shell/compiled.sh"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
