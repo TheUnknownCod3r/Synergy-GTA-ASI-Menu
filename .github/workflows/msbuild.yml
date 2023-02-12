@@ -52,7 +52,7 @@ jobs:
   release:
     needs: build
     permissions: write-all
-    name: "Pre-Release"
+    name: "Release"
     runs-on: windows-latest
 
     steps:
@@ -66,6 +66,6 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
-          prerelease: true
+          prerelease: false
           title: ${{ steps.version.outputs.version}}
           files: SynergyGTA.zip
