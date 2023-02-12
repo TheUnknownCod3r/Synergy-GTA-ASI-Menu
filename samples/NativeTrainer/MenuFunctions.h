@@ -158,6 +158,21 @@ bool SpawnedPedHasGodmode[20];
 char* SoundToPlay;
 char* SoundSetToPlay;
 bool PlaySounds;
+char* VehName;
+Vehicle veh;
+char *model;
+HANDLE mainFiber;
+DWORD wakeAt;
+char str[50];
+#pragma warning(disable : 4244 4305) // double <-> float conversions
+uint32_t hash_veh;
+int SpawnedVeh;
+bool GodModeTog = false, VehicleGod = false;
+char* VehicleString;
+bool SpawningVehicle;
+bool PlayerGodmod;
+bool NoCops;
+BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(PLAYER::PLAYER_PED_ID());
 using namespace std;
 #pragma endregion
 #pragma region Option Helpers

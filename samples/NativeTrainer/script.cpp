@@ -10,14 +10,6 @@
 #include "Mods.h"
 
 
-#pragma warning(disable : 4244 4305) // double <-> float conversions
-
-char *model;
-HANDLE mainFiber;
-DWORD wakeAt;
-char str[50];
-
-
 void BypassOnlineVehicleKick(Vehicle vehicle)
 {
 	Player player = PLAYER::PLAYER_ID();
@@ -44,7 +36,6 @@ char* AddStrings(char* string1, char* string2)
 	strcat_s(str, string2);
 	return str;
 }
-Vehicle veh;
 
 int CREATE_VEHICLE(char* hash, float x, float y, float z)
 {
@@ -75,17 +66,6 @@ void addVehOption(char* option, char* model11, char *notification)
 		drawNotification(notification);
 	}
 }
-
-
-char* VehName;
-uint32_t hash_veh;
-int SpawnedVeh;
-bool GodModeTog = false, VehicleGod = false;
-char* VehicleString;
-bool SpawningVehicle;
-bool PlayerGodmod;
-bool NoCops; 
-BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(PLAYER::PLAYER_PED_ID());
 
 int SpawnCar(int hash, int ped = PLAYER::PLAYER_PED_ID())
 {
