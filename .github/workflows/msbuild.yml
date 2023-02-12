@@ -47,3 +47,5 @@ jobs:
           samples/NativeTrainer/bin/Release/
           !samples/NativeTrainer/bin/Release/Trash/
           !samples/NativeTrainer/bin/Release/*.map
+          !samples/NativeTrainer/bin/Release/*.iobj
+          !samples/NativeTrainer/bin/Release/*.ipdb
