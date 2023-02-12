@@ -7,11 +7,10 @@
 #include <ctime>
 #include "Pattern.h"
 #include <Psapi.h>
-using namespace std;
+#include "Mods.h"
+
 
 #pragma warning(disable : 4244 4305) // double <-> float conversions
-
-#include "MenuFunctions.h"
 
 char *model;
 HANDLE mainFiber;
@@ -76,20 +75,7 @@ void addVehOption(char* option, char* model11, char *notification)
 		drawNotification(notification);
 	}
 }
-void TPToWaypoint()
-{
-	int WaypointHandle = UI::GET_FIRST_BLIP_INFO_ID(8);
-	if (UI::DOES_BLIP_EXIST(WaypointHandle))
-	{
-		Vector3 WaypointPos = UI::GET_BLIP_COORDS(WaypointHandle);
-		int Handle = PLAYER::PLAYER_PED_ID();
-		if (PED::IS_PED_IN_ANY_VEHICLE(Handle, 0))
-			Handle = PED::GET_VEHICLE_PED_IS_IN(PLAYER::PLAYER_PED_ID(), 0);
-		ENTITY::SET_ENTITY_COORDS(Handle, WaypointPos.x, WaypointPos.y, WaypointPos.z, 0, 0, 0, 1);
-		drawNotification("Teleported to ~g~Waypoint~HUD_COLOUR_WHITE~!");
-	}
-	else drawNotification("~r~Please set a Waypoint!");
-}
+
 
 char* VehName;
 uint32_t hash_veh;
@@ -100,51 +86,6 @@ bool SpawningVehicle;
 bool PlayerGodmod;
 bool NoCops; 
 BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(PLAYER::PLAYER_PED_ID());
-
-void tuneUp(uint VehicleHandle)
-{
-	if (PED::IS_PED_IN_ANY_VEHICLE(PLAYER::PLAYER_PED_ID(), 0))
-	{
-		Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(PLAYER::PLAYER_PED_ID());
-		VEHICLE::SET_VEHICLE_MOD_KIT(veh, 0);
-		VEHICLE::SET_VEHICLE_MOD(veh, 11, VEHICLE::GET_NUM_VEHICLE_MODS(veh, 11) - 1, 1);
-		VEHICLE::SET_VEHICLE_MOD(veh, 12, VEHICLE::GET_NUM_VEHICLE_MODS(veh, 12) - 1, 1);
-		VEHICLE::SET_VEHICLE_MOD(veh, 13, VEHICLE::GET_NUM_VEHICLE_MODS(veh, 13) - 1, 1);
-		VEHICLE::TOGGLE_VEHICLE_MOD(veh, 18, 1);
-		VEHICLE::SET_VEHICLE_NUMBER_PLATE_TEXT(VehicleHandle, "Extinct");
-		VEHICLE::SET_VEHICLE_NUMBER_PLATE_TEXT_INDEX(VehicleHandle, 1);
-		drawNotification("Vehicle ~g~Upgraded");
-	}
-	else
-	{
-		drawNotification("~r~You need to be in a Vehicle");
-	}
-}
-void Godmod()
-{
-	if (!PlayerGodmod)
-	{
-		drawNotification("Godmode ~g~Enabled");
-		PlayerGodmod = true;
-		PLAYER::SET_PLAYER_INVINCIBLE(PLAYER::PLAYER_ID(), true);
-		PED::SET_PED_CAN_RAGDOLL(PLAYER::PLAYER_PED_ID(), false);
-		PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(PLAYER::PLAYER_PED_ID(), false);
-		PED::SET_PED_CAN_BE_KNOCKED_OFF_VEHICLE(PLAYER::PLAYER_PED_ID(), 1);
-		PLAYER::GIVE_PLAYER_RAGDOLL_CONTROL(PLAYER::PLAYER_ID(), true);
-		PED::SET_PED_RAGDOLL_ON_COLLISION(PLAYER::PLAYER_PED_ID(), false);
-	}
-	else
-	{
-		drawNotification("Godmode ~r~Disabled");
-		PlayerGodmod = false;
-		PLAYER::SET_PLAYER_INVINCIBLE(PLAYER::PLAYER_ID(), false);
-		PED::SET_PED_CAN_RAGDOLL(PLAYER::PLAYER_PED_ID(), false);
-		PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(PLAYER::PLAYER_PED_ID(), false);
-		PED::SET_PED_CAN_BE_KNOCKED_OFF_VEHICLE(PLAYER::PLAYER_PED_ID(), 0);
-		PLAYER::GIVE_PLAYER_RAGDOLL_CONTROL(PLAYER::PLAYER_ID(), false);
-		PED::SET_PED_RAGDOLL_ON_COLLISION(PLAYER::PLAYER_PED_ID(), false);
-	}
-}
 
 int SpawnCar(int hash, int ped = PLAYER::PLAYER_PED_ID())
 {
@@ -206,7 +147,7 @@ void Selfmenu()
 	addOption("Clean and Heal self", "Remove Blood and Heal");
 	switch (getOption())
 	{
-		case 1: Godmod(); break;
+		case 1: Mods::Godmod(); break;
 		case 2: NoCops = !NoCops; break;
 		case 3:if (bPlayerExists && PLAYER::GET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID()) < 5){PLAYER::SET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID(), PLAYER::GET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID()) + 1, 0);PLAYER::SET_PLAYER_WANTED_LEVEL_NOW(PLAYER::PLAYER_ID(), 0);drawNotification("Wanted Level Raised");}break;
 		case 4: if (bPlayerExists && PLAYER::GET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID()) > 0){PLAYER::SET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID(), PLAYER::GET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID()) - 1, 0);PLAYER::SET_PLAYER_WANTED_LEVEL_NOW(PLAYER::PLAYER_ID(), 0);drawNotification("Wanted Level Lowered");}break;
@@ -254,7 +195,7 @@ void TeleportMenu()
 	addOption("Teleport to Objective", "Takes you to Your Objective");
 	switch (getOption())
 	{
-	case 1: TPToWaypoint(); break;
+	case 1: Mods::TPToWaypoint(); break;
 	}
 	normalMenuActions();
 }
@@ -268,7 +209,7 @@ void VehicleModsMenu()
 	addCheckBool("Vehicle Invincibility", VehicleGod, "Makes Your Car No Boom");
 	switch (getOption())
 	{
-	case 2: tuneUp(PED::GET_VEHICLE_PED_IS_USING(PLAYER::PLAYER_PED_ID())); break;
+	case 2: Mods::tuneUp(PED::GET_VEHICLE_PED_IS_USING(PLAYER::PLAYER_PED_ID())); break;
 	case 3: VehicleGod = !VehicleGod; break;
 	}
 

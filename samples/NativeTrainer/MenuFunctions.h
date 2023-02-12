@@ -158,6 +158,7 @@ bool SpawnedPedHasGodmode[20];
 char* SoundToPlay;
 char* SoundSetToPlay;
 bool PlaySounds;
+using namespace std;
 #pragma endregion
 #pragma region Option Helpers
 void drawNotification(char* msg)

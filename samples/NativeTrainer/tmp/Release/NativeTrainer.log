@@ -1,21 +1,9 @@
 ﻿  script.cpp
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(232): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.22000.0\ucrt\stdio.h(1764): note: see declaration of 'sprintf'
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(280): warning C4018: '>': signed/unsigned mismatch
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(327): warning C4390: ';': empty controlled statement found; is this the intent?
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(346): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.22000.0\ucrt\stdio.h(1939): note: see declaration of '_snprintf'
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(599): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.22000.0\ucrt\stdio.h(1939): note: see declaration of '_snprintf'
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(604): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.22000.0\ucrt\stdio.h(1939): note: see declaration of '_snprintf'
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\menufunctions.h(622): warning C4101: 'grey': unreferenced local variable
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\script.cpp(73): warning C4312: 'type cast': conversion from 'unsigned int' to 'int *' of greater size
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\script.cpp(76): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
-e:\synergy base v1.66\synergy base v1.66\samples\nativetrainer\script.cpp(115): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
+c:\users\mrfaw\documents\github\synergy-gta-asi-menu\samples\nativetrainer\menufunctions.h(283): warning C4018: '>': signed/unsigned mismatch
   Generating code
-  1 of 207 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    15 functions had inline decision re-evaluated but remain unchanged
+c:\users\mrfaw\documents\github\synergy-gta-asi-menu\samples\nativetrainer\script.cpp(167): warning C4715: 'SpawnCar': not all control paths return a value
+  213 of 213 functions (100.0%) were compiled.
+    17 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  NativeTrainer.vcxproj -> E:\Synergy Base v1.66\Synergy Base v1.66\samples\NativeTrainer\bin\Release\SynergyGTA.asi
+  NativeTrainer.vcxproj -> C:\Users\mrfaw\Documents\GitHub\Synergy-GTA-ASI-Menu\samples\NativeTrainer\bin\Release\SynergyGTA.asi

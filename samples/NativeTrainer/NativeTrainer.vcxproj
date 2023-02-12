@@ -18,6 +18,7 @@
     <ClInclude Include="..\..\inc\types.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="MenuFunctions.h" />
+    <ClInclude Include="Mods.h" />
     <ClInclude Include="Pattern.h" />
     <ClInclude Include="script.h" />
     <ClInclude Include="stdafx.h" />

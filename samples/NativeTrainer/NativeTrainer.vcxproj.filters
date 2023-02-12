@@ -29,6 +29,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="Mods.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
